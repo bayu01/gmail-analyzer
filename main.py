@@ -2,6 +2,7 @@ import sqlite3
 import os
 import pickle
 import time
+import traceback
 
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -110,7 +111,7 @@ def list_messages(service, user_id='me', start_message_epoch=None, max_results=N
             print(f"STAGE 1 of 2: Remaining Estimated Time: {estimated_time_to_complete:.2f} seconds")
 
             # Add a pause to avoid exceeding the rate limit
-            time.sleep(0.5)  # You can adjust the duration based on your needs
+            # time.sleep(0.5)  # You can adjust the duration based on your needs
         else:
             break
 
@@ -145,17 +146,16 @@ def get_subject(message):
 
 
 def get_from_email(message):
-    from_header = next((header['value'] for header in message['payload']['headers'] if header['name'] == 'From'), None)
+    from_header = next((header['value'] for header in message['payload']['headers'] if header['name'] == 'From'), 'N/A')
 
-    # Check if the email address is enclosed in angle brackets
-    start_index = from_header.find('<')
-    end_index = from_header.find('>')
+    if from_header:
+        # Check if the email address is enclosed in angle brackets
+        start_index = from_header.find('<')
+        end_index = from_header.find('>')
 
-    if start_index != -1 and end_index != -1:
-        return from_header[start_index + 1:end_index]
-    else:
-        return from_header
-
+        if start_index != -1 and end_index != -1:
+            return from_header[start_index + 1:end_index]
+    return from_header
 
 def commit_changes():
     connection.commit()
@@ -188,9 +188,9 @@ def main():
         message = get_message(service, msg_id=msg['id'])
         date_received = int(message['internalDate'])
         from_email = get_from_email(message)
-        domain_origin = from_email.split('@')[1] if '@' in from_email else ''
+        domain_origin = from_email.split('@')[1] if from_email and '@' in from_email else 'N/A'
         size_of_email = int(message['sizeEstimate'])
-        has_attachments = 1 if 'parts' in message['payload'] else 0
+        has_attachments = 1 if message['payload'] and 'parts' in message['payload'] else 0
         subject = get_subject(message)
 
         # Print information of the message
@@ -233,6 +233,7 @@ if __name__ == '__main__':
 
     except Exception as e:
         print(f"An error occurred: {e}")
+        traceback.print_exc()
 
     finally:
         # Close the connection in the finally block to ensure it's always closed
