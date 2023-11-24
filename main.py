@@ -151,7 +151,6 @@ def main():
 
     # Get the ID of the last processed message
     last_processed_message_id = get_last_processed_message()
-    last_processed_message_id = "18bfe32a9e3a62b8"
     print(f"Last processed message ID: {last_processed_message_id}")
 
     # List and process messages starting from the last processed message
