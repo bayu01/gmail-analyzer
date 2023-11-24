@@ -59,7 +59,18 @@ Here is an example of how the data might look in the database:
 
 | message_id       | date_received | from_email              | domain_origin | size_of_email | has_attachments | subject                 |
 |------------------|---------------|-------------------------|---------------|---------------|-----------------|-------------------------|
-| 145488604a5b2bf0 | 1461694886000 | john.doe@example.com    | example.com   | 1500          | 1               | "FWD: Meeting Tomorrow" |
-| 130d2587bf896d3b | 1419017670000 | alice.smith@example.org | example.org   | 1200          | 0               | "RE: Proposal Attached" |
+| 145488604a5b2bf0 | 1461694886000 | john.smith@example.com  | example.com   | 256500        | 1               | "FWD: Cat Pics"         |
+| 145488604a5b2bf0 | 1461694886000 | john.doe@example.com    | example.com   | 15600         | 1               | "FWD: Meeting Tomorrow" |
+| 130d2587bf896d3b | 1419017670000 | alice.smith@example.org | example.org   | 12300         | 0               | "RE: Proposal Attached" |
 | ...              | ...           | ...                     | ...           | ...           | ...             | ...                     |
 
+## Email Analysis
+
+### Purpose
+
+Find GMAIL email filters that are consuming the most space.
+
+i.e:
+
+* 'from:example.com, Subject:fwd re'
+* 'from:apple.com, Subject: new iphone'
