@@ -173,7 +173,6 @@ def main():
 
     # Get the ID of the last processed message
     last_processed_message_epoch = get_last_processed_message()
-    last_processed_message_epoch = 1690470225000
     print(f"Last processed message ID: {last_processed_message_epoch}")
 
     # List and process messages starting from the last processed message
